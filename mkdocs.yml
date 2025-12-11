@@ -1,0 +1,41 @@
+site_name: Tipi Tutorial
+repo_url: https://github.com/tensorimgpipeline/Tutorial
+site_url: https://tensorimgpipeline.github.io/Tuturial
+site_description: This is a Tutorial for TIPI
+site_author: Matti Kaupenjohann
+edit_uri: edit/main/docs/
+repo_name: tensorimgpipeline/Tutorial
+copyright: Maintained by <a href="https://github.com/MaKaNu">MaKaNu</a>.
+
+nav:
+  - Home: index.md
+  - Level 0: level_0.md
+
+plugins:
+  - search
+
+theme:
+  name: material
+  feature:
+    tabs: true
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - toc:
+      permalink: true
