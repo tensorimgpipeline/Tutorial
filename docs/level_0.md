@@ -89,4 +89,4 @@ This script works, but notice a few pain points:
 - **Hardcoded device** — Works, but could be cleaner
 - **Monolithic script** — Hard to reuse or test individual parts
 
-In [Level 1](level_1.md), we'll add progress bars so you can see training progress in real-time.
+In [Level 1](level_1.md), we'll refactor the script so we get managable for-loops.
