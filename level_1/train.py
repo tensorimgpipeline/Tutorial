@@ -60,17 +60,16 @@ print(model)
 loss_fn = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
 
+epochs = 5
+
 trainer = Trainer(
     model,
-    train_loader=train_dataloader,
-    test_loader=test_dataloader,
     optimizer=optimizer,
-    epochs=5,
     loss_fn=loss_fn,
     device=torch.device(device)
 )
 
-trainer.run_epochs()
+trainer.run_epochs(range(epochs), train_dataloader, test_dataloader)
 print("Done!")
 
 torch.save(model.state_dict(), "model.pth")
