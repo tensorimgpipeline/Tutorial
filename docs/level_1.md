@@ -17,13 +17,13 @@ From `level_1/train.py` remove the two functions:
 - `def train`
 - `def test`
 
-Also the epoch iteration needs to be deleted.
-Lines 61 - 99.
+Also, the epoch iteration needs to be deleted.
+Lines 61-99.
 
 We want to create a class `Trainer`, which provides those methods.
 
-Instead we update the script by creating our class instance and
-calling their methods (they don't exists yet) at the same place:
+Instead, we update the script by creating our class instance and
+calling their methods (they don't exist yet) at the same place:
 
 At the top of the script below the other imports:
 
