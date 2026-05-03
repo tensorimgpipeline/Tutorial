@@ -145,7 +145,7 @@ Here are the three methods:
 
 ## Result
 
-If everything works as expected, the result should look the same as in [level_0](level_1.md#expected-result)
+If everything works as expected, the result should look the same as in [level_0](level_0.md#expected-output)
 
 ## What's next?
 
