@@ -9,6 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
+# Ignore Static pages
+site/*
+
 # level_0
 data/
 model.pth
