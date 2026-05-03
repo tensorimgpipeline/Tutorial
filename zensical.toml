@@ -1,0 +1,87 @@
+[project]
+site_name = "TIPI - Tutorial"
+repo_url = "https://github.com/tensorimgpipeline/Tutorial"
+site_url = "https://tensorimgpipeline.github.io/Tutorial"
+site_description = "A Tutorial for TIPI - TensorImagePIpeline"
+site_author = "MaKaNu"
+edit_uri = "edit/main/docs/"
+repo_name = "tensorimgpipeline/Tutorial"
+copyright = "Maintained by <a href='https://makanu.de'>MaKaNu</a>."
+
+nav = [
+    { "Home" = "index.md" },
+    { "Level 0" = "level_0.md" },
+	{ "Level 1" = "level_1.md" },
+	{ "Level 2" = "level_2.md" },
+	{ "Level 3" = "level_3.md" },
+	{ "Level 4" = "level_4.md" },
+	{ "Level 5" = "level_5.md" },
+
+]
+
+extra_css = ["stylesheets/extra.css"]
+
+[project.theme]
+favicon = "static/logo.svg"
+language = "en"
+features = [
+    "announce.dismiss",
+    "content.code.annotate",
+    "content.action.edit",
+    "content.action.view",
+    "content.code.copy",
+    "content.code.select",
+    "content.footnote.tooltips",
+    "content.tabs.link",
+    "content.tooltips",
+    "navigation.footer",
+    "navigation.indexes",
+    "navigation.instant",
+    "navigation.instant.prefetch",
+    "navigation.path",
+    "navigation.prune",
+    "navigation.top",
+    "navigation.tracking",
+    "search.highlight",
+]
+
+logo = "static/logo.svg"
+
+[project.theme.icon]
+previous = "fontawesome/solid/angle-left"
+next = "fontawesome/solid/angle-right"
+repo = "fontawesome/brands/github"
+
+#[project.theme.font]
+#text = "Inter"
+#code = "Jetbrains Mono"
+
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+toggle.icon = "material/brightness-auto"
+toggle.name = "Switch to light mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "astral-light"
+toggle.icon =  "material/brightness-7"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "astral-dark"
+toggle.icon =  "material/brightness-4"
+toggle.name = "Switch to system preference"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/tensorimgpipeline/Tutorial"
+
+[project.markdown_extensions.pymdownx.superfences]
+
+[project.markdown_extensions.pymdownx.arithmatex]
+generic = true
+
+[project.markdown_extensions.toc]
+permalink = true

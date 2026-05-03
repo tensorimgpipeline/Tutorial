@@ -32,4 +32,6 @@ explicit = true
 dev = [
     "mkdocs-material>=9.7.0",
     "mkdocs>=1.6.1",
+    "mkdocstrings[python]>=1.0.4",
+    "zensical>=0.0.39",
 ]
