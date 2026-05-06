@@ -1,0 +1,57 @@
+name: Tutorial Level Troubleshoot
+description: File a troubleshoot report.
+title: "[Troubleshoot]: "
+labels: ["troubleshoot"]
+assignees:
+  - makanu
+type: bug
+body:
+  - type: dropdown
+  	id: level
+    attributes:
+      label: Level
+      description: Which level created issues?
+      options:
+        - Level 0 (Default)
+        - Level 1
+		- Level 2
+		- Level 3
+		- Level 4
+		- Level 5
+      default: 0
+    validations:
+      required: true
+  - type: checkboxes
+    id: checked-troubleshooting
+    attributes:
+      label: Checked Troubleshoot Section
+      options:
+        - label: I checked the Troubleshooting Section of this level. 
+          required: true
+  - type: input
+    id: what-section
+    attributes:
+      label: Which Section
+      description: In which section the tutorial was ambiguous?
+      placeholder: "Section: <Name-of-Section>"
+    validations:
+      required: true
+  - type: textarea
+	id: what-happened
+    attributes:
+      label: What was ambiguous?
+      description: Also, tell us how we might improve the section?
+      placeholder: Tell us details about the ambiguous part.
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this troubleshoot report!
+  - type: upload
+    id: screenshots
+    attributes:
+      label: Upload screenshots
+      description: If applicable, add screenshots to help explain your problem.
+    validations:
+      required: false
