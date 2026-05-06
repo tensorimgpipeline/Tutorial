@@ -7,17 +7,17 @@ assignees:
 type: bug
 body:
   - type: dropdown
-  	id: level
+    id: level
     attributes:
       label: Level
       description: Which level created issues?
       options:
         - Level 0 (Default)
         - Level 1
-		- Level 2
-		- Level 3
-		- Level 4
-		- Level 5
+        - Level 2
+        - Level 3
+        - Level 4
+        - Level 5
       default: 0
     validations:
       required: true
@@ -26,7 +26,7 @@ body:
     attributes:
       label: Checked Troubleshoot Section
       options:
-        - label: I checked the Troubleshooting Section of this level. 
+        - label: I checked the Troubleshooting Section of this level.
           required: true
   - type: input
     id: what-section
@@ -37,7 +37,7 @@ body:
     validations:
       required: true
   - type: textarea
-	id: what-happened
+    id: what-happened
     attributes:
       label: What was ambiguous?
       description: Also, tell us how we might improve the section?
