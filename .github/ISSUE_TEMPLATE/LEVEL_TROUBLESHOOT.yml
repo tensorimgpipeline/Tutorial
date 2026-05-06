@@ -41,7 +41,7 @@ body:
     attributes:
       label: What was ambiguous?
       description: Also, tell us how we might improve the section?
-      placeholder: Tell us details about the ambiguous part.
+      placeholder: What was confusing?
     validations:
       required: true
   - type: markdown
