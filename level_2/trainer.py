@@ -1,8 +1,9 @@
 # tutorial/level_1/trainer.py
 from __future__ import annotations
+from collections.abc import Generator
 from typing import Any
 
-from tipi.decorators import progress_task
+from tipi.decorators import progress_task, Update
 
 import torch
 from torchvision import datasets
@@ -36,7 +37,9 @@ class Trainer:
         self.correct = 0.0
 
     @progress_task()
-    def train_epoch(self, dataloader: torch.utils.data.DataLoader[datasets.FashionMNIST]) -> None:
+    def train_epoch(
+        self, dataloader: torch.utils.data.DataLoader[datasets.FashionMNIST]
+    ) -> Generator[Update, None, None]:
         for batch, (X, y) in enumerate(dataloader):
             X, y = X.to(self.device), y.to(self.device)
 
@@ -51,15 +54,24 @@ class Trainer:
 
             if batch % 100 == 0:
                 loss, current = loss.item(), (batch + 1) * len(X)
-                print(f"loss: {loss:>7f}  [{current:>5d}/{self.train_size:>5d}]")
+                yield Update(
+                    f"loss: {loss:>7f}  [{current:>5d}/{self.train_size:>5d}]",
+                    advance=0,
+                )
+            yield Update()
 
     @progress_task()
-    def test_epoch(self, dataloader: torch.utils.data.DataLoader[datasets.FashionMNIST]) -> None:
+    def test_epoch(
+        self, dataloader: torch.utils.data.DataLoader[datasets.FashionMNIST]
+    ) -> Generator[Update, None, None]:
         for X, y in dataloader:
             X, y = X.to(self.device), y.to(self.device)
             pred = self.model(X)
             self.test_loss += self.loss_fn(pred, y).item()
             self.correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+            yield Update(
+                f"Test loss: {self.test_loss:>7f}  [{self.correct:>5.0f}/{self.test_size:>5d}]"
+            )
 
     @progress_task()
     def run_epochs(
@@ -67,12 +79,12 @@ class Trainer:
         epochs: range,
         train_loader: torch.utils.data.DataLoader[datasets.FashionMNIST],
         test_loader: torch.utils.data.DataLoader[datasets.FashionMNIST],
-    ):
+    ) -> Generator[Update, None, None]:
         self.train_size = len(train_loader.dataset)  # type: ignore
         self.test_size = len(test_loader.dataset)  # type: ignore
         self.num_batches_test = len(test_loader)
         for t in epochs:
-            print(f"Epoch {t+1}\n-------------------------------")
+            yield Update(f"# {t + 1}", advance=0)
             self.model.train()
             self.train_epoch(train_loader)
             self.model.eval()
@@ -81,5 +93,6 @@ class Trainer:
                 self.test_epoch(test_loader)
             self.test_loss /= self.num_batches_test
             self.correct /= self.test_size
-            print(f"Test Error: \n Accuracy: {(100*self.correct):>0.1f}%, Avg loss: {self.test_loss:>8f} \n")
-
+            yield Update(
+                f"Test Accuracy: {(100 * self.correct):>0.1f}%, Avg loss: {self.test_loss:>8f} \n"
+            )
