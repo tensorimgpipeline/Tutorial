@@ -20,7 +20,7 @@ After we implemented the below tasks all print statements are presented via `Pro
 
 1. Apply Progress Decorator
 2. Apply simple Update
-2. Replace print statements via status
+3. Replace print statements via status
 
 ### Apply the Progress Decorator
 
@@ -109,13 +109,15 @@ For our example does this mean:
 We apply option 1 for `run_epochs` and `test_epoch` and option 2
 for `train_epoch`.
 
-## Results
+## Result
 
 After completing the tasks, we should have now a working progress bar. 
 The output is now much cleaner, but still has room for improvement.
 The good thing: Those improvements are already in place and work as soon as the later integrate the pipeline.
 
 ## Troubleshooting
+
+If you had issues to recreate this level, please provide informations via [troubleshoot form](https://github.com/tensorimgpipeline/Tutorial/issues/new?template=LEVEL_TROUBLESHOOT.yml)
 
 ### AI autocomplete
 

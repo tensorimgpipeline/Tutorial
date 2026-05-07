@@ -1,9 +1,20 @@
 # Level 0
 
-Here is the start.
 You have just left the [Quickstart](https://docs.pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html) Tutorial of Pytorch.
 
-Before we can start with the transition, we need to prepare some steps to follow this tutorial.
+## Goal
+
+Since `tipi` is heavily based on uv dependency management, we introduce this in this first level.
+At the end we should have the default tutorial of `pytorch` but dependencies managed with `uv`
+
+## Before / After
+
+This tutorial level provides the transition from pip managed venv to uv managed dependencies and venv.
+
+## Tasks
+
+1. Preparation
+2. Execution
 
 ## Preparation
 
@@ -45,13 +56,15 @@ uv add torch torchvision
 
 This should bring us to the point of the Pytorch Tutorial.
 
+## Execution
+
 We should be able to execute:
 
 ```bash
 uv run python level_0/train.py
 ```
 
-## Expected Output
+## Result
 
 ```text
 Downloading http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/train-images-idx3-ubyte.gz
@@ -80,9 +93,7 @@ Saved PyTorch Model State to model.pth
 Predicted: "Ankle boot", Actual: "Ankle boot"
 ```
 
-## What's next?
-
-This script works, but notice a few pain points:
+While the script runs successfully, there are a few notable limitations:
 
 - **No progress indication** — You have no idea how long each epoch takes
 - **No experiment tracking** — Loss values scroll by and are lost
@@ -90,3 +101,7 @@ This script works, but notice a few pain points:
 - **Monolithic script** — Hard to reuse or test individual parts
 
 In [Level 1](level_1.md), we'll refactor the script so we get managable for-loops.
+
+## Troubleshooting
+
+If you had issues to recreate this level, please provide informations via [troubleshoot form](https://github.com/tensorimgpipeline/Tutorial/issues/new?template=LEVEL_TROUBLESHOOT.yml)

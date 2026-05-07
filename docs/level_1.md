@@ -1,14 +1,28 @@
 # Level 1
 
 With a working tutorial from `pytorch` combined with `uv` we are now able to begin the refactoring.
+
+## Goal
+
 The goal of the refactoring is to achieve a smooth transition to a final integration with the tool [tipi](https://pypi.org/project/TensorImgPipeline/).
 
-This level provides the Instruction, to modify the `train.py` script, so that the integration of provided utility of the `tipi` package could be used.
+This level provides the instruction, to modify the `train.py` script, so that the integration of provided utility of the `tipi` package could be used.
 
-## Refactor
+## Before / After
+
+Currently, the script is only a script but provided with dependencies via `uv`.
+
+When we applied the tasks below we have splitted the script into a script and a module.
+The module provides the same steps from the script but better packaged as methods.
+
+## Tasks
 
 Copy the level_0 to level_1 directory (it is also possible to use a version control system to switch between levels.
 We decided against this, since we want a clean final state of each level.).
+This will be the first step for each level from now.
+
+1. Remove functions from script
+2. Create the module with Trainer class
 
 ### Remove the current train iterator functions
 
@@ -38,16 +52,13 @@ Now at line 63 we can create:
 
 ```python
 trainer = trainer_lib.Trainer(
-    model=model,
-    optimizer=optimizer,
-    loss_fn=loss_fn,
-    device=device
+    model=model, optimizer=optimizer, loss_fn=loss_fn, device=device
 )
 
 trainer.run_epochs(range(epochs), train_dataloader, test_dataloader)
 ```
 
-## Create the class
+### Create the module with `Trainer` class
 
 The class `Trainer` needs to provide now all the things which are needed in the
 for loop methods it provides:
@@ -74,10 +85,9 @@ class Trainer:
 To work correctly in the test and with a to give it more usability we provide a reset method:
 
 ```python
-    def reset(self):
-        self.test_loss = 0.0
-        self.correct = 0.0
-
+def reset(self):
+    self.test_loss = 0.0
+    self.correct = 0.0
 ```
 
 > In this scenario we call it directly in the epoch loop, but we could also run it directly in
@@ -97,58 +107,68 @@ method.
 Here are the three methods:
 
 ```python
-    def train_epoch(self, dataloader: torch.utils.data.DataLoader[datasets.FashionMNIST]) -> None:
-        for batch, (X, y) in enumerate(dataloader):
-            X, y = X.to(self.device), y.to(self.device)
+def train_epoch(
+    self, dataloader: torch.utils.data.DataLoader[datasets.FashionMNIST]
+) -> None:
+    for batch, (X, y) in enumerate(dataloader):
+        X, y = X.to(self.device), y.to(self.device)
 
-            # Compute prediction error
-            pred = self.model(X)
-            loss = self.loss_fn(pred, y)
+        # Compute prediction error
+        pred = self.model(X)
+        loss = self.loss_fn(pred, y)
 
-            # Backpropagation
-            loss.backward()
-            self.optimizer.step()
-            self.optimizer.zero_grad()
+        # Backpropagation
+        loss.backward()
+        self.optimizer.step()
+        self.optimizer.zero_grad()
 
-            if batch % 100 == 0:
-                loss, current = loss.item(), (batch + 1) * len(X)
-                print(f"loss: {loss:>7f}  [{current:>5d}/{self.train_size:>5d}]")
+        if batch % 100 == 0:
+            loss, current = loss.item(), (batch + 1) * len(X)
+            print(f"loss: {loss:>7f}  [{current:>5d}/{self.train_size:>5d}]")
 
-    def test_epoch(self, dataloader: torch.utils.data.DataLoader[datasets.FashionMNIST]) -> None:
-        for X, y in dataloader:
-            X, y = X.to(self.device), y.to(self.device)
-            pred = self.model(X)
-            self.test_loss += self.loss_fn(pred, y).item()
-            self.correct += (pred.argmax(1) == y).type(torch.float).sum().item()
 
-    def run_epochs(
-        self,
-        epochs: range,
-        train_loader: torch.utils.data.DataLoader[datasets.FashionMNIST],
-        test_loader: torch.utils.data.DataLoader[datasets.FashionMNIST],
-    ):
-        self.train_size = len(train_loader.dataset)  # type: ignore
-        self.test_size = len(test_loader.dataset)  # type: ignore
-        self.num_batches_test = len(test_loader)
-        for t in epochs:
-            print(f"Epoch {t+1}\n-------------------------------")
-            self.model.train()
-            self.train_epoch(train_loader)
-            self.model.eval()
-            self.reset()
-            with torch.no_grad():
-                self.test_epoch(test_loader)
-            self.test_loss /= self.num_batches_test
-            self.correct /= self.test_size
-            print(f"Test Error: \n Accuracy: {(100*self.correct):>0.1f}%, Avg loss: {self.test_loss:>8f} \n")
+def test_epoch(
+    self, dataloader: torch.utils.data.DataLoader[datasets.FashionMNIST]
+) -> None:
+    for X, y in dataloader:
+        X, y = X.to(self.device), y.to(self.device)
+        pred = self.model(X)
+        self.test_loss += self.loss_fn(pred, y).item()
+        self.correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+
+
+def run_epochs(
+    self,
+    epochs: range,
+    train_loader: torch.utils.data.DataLoader[datasets.FashionMNIST],
+    test_loader: torch.utils.data.DataLoader[datasets.FashionMNIST],
+):
+    self.train_size = len(train_loader.dataset)  # type: ignore
+    self.test_size = len(test_loader.dataset)  # type: ignore
+    self.num_batches_test = len(test_loader)
+    for t in epochs:
+        print(f"Epoch {t + 1}\n-------------------------------")
+        self.model.train()
+        self.train_epoch(train_loader)
+        self.model.eval()
+        self.reset()
+        with torch.no_grad():
+            self.test_epoch(test_loader)
+        self.test_loss /= self.num_batches_test
+        self.correct /= self.test_size
+        print(
+            f"Test Error: \n Accuracy: {(100 * self.correct):>0.1f}%, Avg loss: {self.test_loss:>8f} \n"
+        )
 ```
 
 ## Result
 
 If everything works as expected, the result should look the same as in [level_0](level_0.md#expected-output)
 
-## What's next?
-
 We are now prepared to use the first functionality of tipi: decorator progress bars.
 
 In [Level 2](level_2.md), we'll add progress bars via decorator so you can see training progress in real-time.
+
+## Troubleshooting
+
+If you had issues to recreate this level, please provide informations via [troubleshoot form](https://github.com/tensorimgpipeline/Tutorial/issues/new?template=LEVEL_TROUBLESHOOT.yml)
