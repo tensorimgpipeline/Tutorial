@@ -5,23 +5,17 @@ description = "Tipi Tutorial"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "tensorimgpipeline==1.1.0",
-    "torch>=2.9.1",
-    "torchvision>=0.24.1",
+  "tensorimgpipeline[tensorboard]==1.2.1",
+  "torch>=2.9.1",
+  "torchvision>=0.24.1",
 ]
 
 [tool.uv]
-required-environments = [
-    "sys_platform == 'linux' and platform_machine == 'x86_64'"
-]
+environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]
 
 [tool.uv.sources]
-torch = [
-  { index = "pytorch-cpu" },
-]
-torchvision = [
-  { index = "pytorch-cpu" },
-]
+torch = [{ index = "pytorch-cpu" }]
+torchvision = [{ index = "pytorch-cpu" }]
 
 [[tool.uv.index]]
 name = "pytorch-cpu"
@@ -29,7 +23,4 @@ url = "https://download.pytorch.org/whl/cpu"
 explicit = true
 
 [dependency-groups]
-dev = [
-    "mkdocstrings[python]>=1.0.4",
-    "zensical>=0.0.39",
-]
+dev = ["mkdocstrings[python]>=1.0.4", "zensical>=0.0.39"]
