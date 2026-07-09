@@ -3,6 +3,8 @@ from __future__ import annotations
 from collections.abc import Generator
 from typing import Any
 
+from tipi.core.permanences.loggers.base import BaseLoggerManager
+from tipi.core.permanences.loggers.patterns import batch_loss, test_loss, test_accuracy
 from tipi.decorators import progress_task, Update
 
 import torch
@@ -22,6 +24,7 @@ class Trainer:
         model: torch.nn.Module,
         optimizer: torch.optim.Optimizer,
         loss_fn: Any,
+        logger: BaseLoggerManager,
         device: torch.device | None = None,
     ) -> None:
         self.model = model
@@ -31,6 +34,7 @@ class Trainer:
 
         self.test_loss: float
         self.correct: float
+        self.logger = logger
 
     def reset(self):
         self.test_loss = 0.0
@@ -54,6 +58,7 @@ class Trainer:
 
             if batch % 100 == 0:
                 loss, current = loss.item(), (batch + 1) * len(X)
+                self.logger.log_metrics(metrics=batch_loss(loss))
                 yield Update(
                     f"loss: {loss:>7f}  [{current:>5d}/{self.train_size:>5d}]",
                     advance=0,
@@ -93,6 +98,9 @@ class Trainer:
                 self.test_epoch(test_loader)
             self.test_loss /= self.num_batches_test
             self.correct /= self.test_size
+            self.logger.log_metrics(
+                metrics=[test_loss(self.test_loss), test_accuracy(self.correct)]
+            )
             yield Update(
                 f"Test Accuracy: {(100 * self.correct):>0.1f}%, Avg loss: {self.test_loss:>8f} \n"
             )
