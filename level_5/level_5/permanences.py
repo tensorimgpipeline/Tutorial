@@ -5,9 +5,13 @@ They store state, data, models, or any resources needed by multiple processes.
 """
 
 from pathlib import Path
+import shutil
 from typing import Any
 
+from torchvision import datasets, transforms
+
 from tipi.abstractions import Permanence
+
 
 class ConfigPermanence(Permanence):
     """Stores configuration parameters for the pipeline."""
@@ -18,7 +22,9 @@ class ConfigPermanence(Permanence):
         Args:
             config_path: Path to configuration file
         """
-        self.config_path = Path(config_path) if isinstance(config_path, str) else config_path
+        self.config_path = (
+            Path(config_path) if isinstance(config_path, str) else config_path
+        )
         self.settings: dict[str, Any] = {}
         self._load_config()
 
@@ -43,33 +49,57 @@ class ConfigPermanence(Permanence):
 class DataPermanence(Permanence):
     """Stores data loaded during the pipeline."""
 
-    def __init__(self, data_dir: Path | str):
+    def __init__(
+        self,
+        root: Path | str,
+        data_set: str = "FashionMNIST",
+        transform: Any = None,
+        download: bool = True,
+        prevent_deletion: bool = True,
+    ):
         """Initialize data permanence.
 
         Args:
-            data_dir: Directory containing data files
+            root: Root directory for data files
+            data_set: Name of the dataset to load
+            transform: Transformations to apply to the data
+            download: Whether to download the dataset if it doesn't exist
+            prevent_deletion: Whether to prevent deletion of the downloaded dataset
         """
-        self.data_dir = Path(data_dir) if isinstance(data_dir, str) else data_dir
-        self.data: dict[str, Any] = {}
-        self.processed_data: dict[str, Any] = {}
+        self.root = Path(root) if isinstance(root, str) else root
+        dataset_class = getattr(datasets, data_set, None)
+        if dataset_class is None:
+            raise ValueError(
+                f"Dataset {data_set} is not available in torchvision.datasets."
+            )
 
-    def set_data(self, key: str, value: Any) -> None:
-        """Store data."""
-        self.data[key] = value
+        if isinstance(transform, str):
+            transform = getattr(transforms, transform, None)
+        elif isinstance(transform, list):
+            transform = transforms.Compose([
+                getattr(transforms, t)() if isinstance(t, str) else t for t in transform
+            ])
+        if not transform:
+            transform = transforms.ToTensor()  # Default transform
 
-    def get_data(self, key: str) -> Any:
-        """Retrieve data."""
-        return self.data.get(key)
+        self.training_data = dataset_class(
+            root=self.root,
+            train=True,
+            download=download,
+            transform=transform,
+        )
+        self.test_data = dataset_class(
+            root=self.root,
+            train=False,
+            download=download,
+            transform=transform,
+        )
 
-    def set_processed(self, key: str, value: Any) -> None:
-        """Store processed data."""
-        self.processed_data[key] = value
-
-    def get_processed(self, key: str) -> Any:
-        """Retrieve processed data."""
-        return self.processed_data.get(key)
+        self.prevent_deletion = prevent_deletion
 
     def cleanup(self) -> None:
         """Clean up resources."""
-        self.data.clear()
-        self.processed_data.clear()
+        if not self.prevent_deletion:
+            shutil.rmtree(self.root, ignore_errors=True)
+        self.training_data = None
+        self.test_data = None
