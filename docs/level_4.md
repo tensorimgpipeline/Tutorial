@@ -144,10 +144,57 @@ So the only extension to our controller:
 ### Bonus: Confusion Matrix
 
 All Loggers provide an implementation of `log_figure`, which allows to log custom figures.
+To provide an example how this is working, we provided the `build_confusion_matrix_figure`.
+We need to create our own pattern for the dataset by adding the `pattern.py` module.
+This pattern ensures the building process of the figure will be aligned to our dataset.
 
-To provide an example how this is working, we provided the build_confusion_matrix_figure.
+We import the pattern on top of our `train.py` script:
 
+```python
+from pattern import FashionMNISTConfusionPattern
+```
 
+Since our test run was a bit cheap until now we update it and use the `log_figure`:
+
+```diff
++y_preds = []
++y_trues = []
++
+x, y = test_data[0][0], test_data[0][1]
+with torch.no_grad():
+-     x = x.to(device)
+-    pred = model(x)
+-    predicted, actual = classes[pred[0].argmax(0)], classes[y]
++    for X, y in test_dataloader:
++        X = X.to(device)
++        y = y.to(device)
++
++        logits = model(X)
++        preds = logits.argmax(dim=1)
++
++        y_preds.extend(preds.detach().cpu().tolist())
++        y_trues.extend(y.detach().cpu().tolist())
++
++    predicted, actual = (
++        classes[y_preds[0]],
++        classes[y_trues[0]],
++    )
+    logger.debug(f'Predicted: "{predicted}", Actual: "{actual}"')
+
+if isinstance(logger, BasicLogger):
+    logger.log_metric_figure(figure_pattern=LOSS_CURVE)
+    logger.log_metric_figure(figure_pattern=ACCURACY_CURVE)
+
++fig = logger.build_confusion_matrix_figure(
++    figure_pattern=FashionMNISTConfusionPattern, y_true=y_trues, y_pred=y_preds
++)
++
++logger.log_figure(name="ConfusionMatrix", figure=fig)
+```
+
+Since the TensorBoardLogger is active the figure will be logged to the image tab of TensorBoard.
+
+> This Bonus example will not be included in level_5.
 
 ## Result
 

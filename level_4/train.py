@@ -4,6 +4,7 @@ from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 
+from pattern import FashionMNISTConfusionPattern
 from trainer import Trainer
 from controller import controller
 
@@ -102,13 +103,33 @@ classes = [
 ]
 
 model.eval()
+y_preds = []
+y_trues = []
+
 x, y = test_data[0][0], test_data[0][1]
 with torch.no_grad():
-    x = x.to(device)
-    pred = model(x)
-    predicted, actual = classes[pred[0].argmax(0)], classes[y]
+    for X, y in test_dataloader:
+        X = X.to(device)
+        y = y.to(device)
+
+        logits = model(X)
+        preds = logits.argmax(dim=1)
+
+        y_preds.extend(preds.detach().cpu().tolist())
+        y_trues.extend(y.detach().cpu().tolist())
+
+    predicted, actual = (
+        classes[y_preds[0]],
+        classes[y_trues[0]],
+    )
     logger.debug(f'Predicted: "{predicted}", Actual: "{actual}"')
 
 if isinstance(logger, BasicLogger):
     logger.log_metric_figure(figure_pattern=LOSS_CURVE)
     logger.log_metric_figure(figure_pattern=ACCURACY_CURVE)
+
+fig = logger.build_confusion_matrix_figure(
+    figure_pattern=FashionMNISTConfusionPattern, y_true=y_trues, y_pred=y_preds
+)
+
+logger.log_figure(name="ConfusionMatrix", figure=fig)
