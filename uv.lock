@@ -775,7 +775,7 @@ wheels = [
 
 [[package]]
 name = "tensorimgpipeline"
-version = "1.2.2"
+version = "1.2.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "defusedxml", marker = "platform_machine == 'x86_64' and sys_platform == 'linux'" },
@@ -795,9 +795,9 @@ dependencies = [
     { name = "typer", marker = "platform_machine == 'x86_64' and sys_platform == 'linux'" },
     { name = "types-defusedxml", marker = "platform_machine == 'x86_64' and sys_platform == 'linux'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c3/23/dca2fbf6eaea3952a403d8aa394b5daf9bafd9319bb71237eb76ff609c5d/tensorimgpipeline-1.2.2.tar.gz", hash = "sha256:9168f61147919ceebac6db06954ba06ea6e352a39149cc629f1f083d06517d4f", size = 277353 }
+sdist = { url = "https://files.pythonhosted.org/packages/dc/f4/ead2b85e0a147613c1c62cbcf03f596ee901abb568202509444720946bdc/tensorimgpipeline-1.2.4.tar.gz", hash = "sha256:130a9c5c94796ce5b2b0846590a5eaf3fe2749299135628468892e7be62c87e5", size = 289569 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/99/9a/d774f286208f584abc827eb4aaeb69a1367aa626247be371d9284d347f4f/tensorimgpipeline-1.2.2-py3-none-any.whl", hash = "sha256:ec0e080076071e8c2f341069afe9f688c8dfd746f85920b2405d9266ecc8e77d", size = 71898 },
+    { url = "https://files.pythonhosted.org/packages/7f/43/417818f0be5ec442a9fa0302c037366e9108b377fcd86af6cb24e8684715/tensorimgpipeline-1.2.4-py3-none-any.whl", hash = "sha256:2a6ccc36791ea69b59c2bd6afb631af4a47087b276d3534f7d510b385b779e1c", size = 81670 },
 ]
 
 [package.optional-dependencies]
@@ -897,7 +897,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "tensorimgpipeline", extras = ["tensorboard"], specifier = "==1.2.2" },
+    { name = "tensorimgpipeline", extras = ["tensorboard"], specifier = "==1.2.4" },
     { name = "torch", specifier = ">=2.9.1", index = "https://download.pytorch.org/whl/cpu" },
     { name = "torchvision", specifier = ">=0.24.1", index = "https://download.pytorch.org/whl/cpu" },
 ]
