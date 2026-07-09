@@ -15,3 +15,6 @@ site/*
 # level_0
 data/
 model.pth
+
+# Logs
+level_*/logs/basic
