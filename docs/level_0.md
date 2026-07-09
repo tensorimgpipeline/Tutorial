@@ -30,7 +30,7 @@ For this scenario a GPU is not necessary, so we need to declare the sources acco
 
 ```toml
 [tool.uv]
-required-environments = [
+environments = [
     "sys_platform == 'linux' and platform_machine == 'x86_64'"
 ]
 
