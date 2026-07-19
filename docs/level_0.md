@@ -56,6 +56,12 @@ uv add torch torchvision
 
 This should bring us to the point of the Pytorch Tutorial.
 
+Additionally, we already install the the `tensorimgpipeline` package, so it is available later:
+
+```bash
+uv add "tensorimgpipeline[tensorboard]"
+```
+
 ## Execution
 
 We should be able to execute:

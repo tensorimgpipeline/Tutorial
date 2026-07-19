@@ -20,7 +20,7 @@ After we implemented the below tasks all print statements are presented via `Pro
 
 1. Apply Progress Decorator
 2. Apply simple Update
-3. Replace print statements via status
+3. Apply progrssbar status field
 
 ### Apply the Progress Decorator
 
@@ -95,12 +95,20 @@ Predicted: "Ankle boot", Actual: "Ankle boot"
 We still heavy the print statments but also already the progress bar.
 With this state the name of the function is used as the title of the progress bar.
 
-### Replace print statements via status
+### Apply progressbar status field
 
-To replace the print statements we have to options:
+To replace the print statements we have to options (shown as example for `run_epochs`):
 
-1. Add the statement as the first argument (`message`) to the `Update` class.
-2. Add another `yield Update("my message", advance=0)`
+- Add the statement as the first argument (`message`) to the `Update` class.
+    ```diff
+    - print(f"Test Error: \n Accuracy: {(100*self.correct):>0.1f}%, Avg loss: {self.test_loss:>8f} \n")
+    + yield Update(f"Test Accuracy: {(100 * self.correct):>0.1f}%, Avg loss: {self.test_loss:>8f} \n")
+    ```      
+- Add another `yield Update("my message", advance=0)`
+    ```diff
+    - print(f"Epoch {t+1}\n-------------------------------")
+    + yield Update(f"# {t + 1}", advance=0)
+    ```  
 
 Setting the advance to 0 updates only the status message of the current progress bar.
 
@@ -140,5 +148,4 @@ def iteration() -> Generator[Update, None, int]:
     return i
 ```
 
-
-
+[^1]: [Docs about Generators](https://docs.python.org/3/tutorial/classes.html#generators)

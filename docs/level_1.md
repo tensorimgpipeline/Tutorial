@@ -31,34 +31,46 @@ From `level_1/train.py` remove the two functions:
 - `def train`
 - `def test`
 
-Also, the epoch iteration needs to be deleted.
-Lines 61-99.
+Also, the epoch loop needs to be removed.
+
+Just keep the line, which is needed for our class later.
+
+```python
+epochs = 5
+```
 
 We want to create a class `Trainer`, which provides those methods.
-
-Instead, we update the script by creating our class instance and
-calling their methods (they don't exist yet) at the same place:
 
 At the top of the script below the other imports:
 
 ```python
-from . import trainer as trainer_lib
+from trainer import Trainer
 ```
 
 > This creates some trouble with type checkers, in a real
 > refactoring all this should be executed in a package.
 
-Now at line 63 we can create:
+Now at the position we earlier removed the function, we insert:
 
 ```python
-trainer = trainer_lib.Trainer(
-    model=model, optimizer=optimizer, loss_fn=loss_fn, device=device
-)
+trainer = Trainer(model=model, optimizer=optimizer, loss_fn=loss_fn, device=device)
 
 trainer.run_epochs(range(epochs), train_dataloader, test_dataloader)
 ```
 
 ### Create the module with `Trainer` class
+
+We create a file `trainer.py` next to our existing `train.py` file.
+
+First we define the imports as usuall:
+
+```python
+from __future__ import annotations
+from typing import Any
+
+import torch
+from torchvision import datasets
+```
 
 The class `Trainer` needs to provide now all the things which are needed in the
 for loop methods it provides:
